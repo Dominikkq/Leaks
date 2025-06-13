@@ -84,6 +84,8 @@
         // Determine whether duplicate filtering is active
         $hideDuplicates = isset($_GET['unique']) && $_GET['unique'] === '1';
         $queryBase      = strtok($_SERVER['REQUEST_URI'], '?'); // path sans query
+        define('LOG_DIR', __DIR__ . '/logs');
+        if (!is_dir(LOG_DIR)) {@mkdir(LOG_DIR,0755,true);}
         ?>
 
         <button class="refresh-btn" onclick="location.href='<?php echo htmlspecialchars($queryBase); ?>'">🔄 Refresh</button>
@@ -98,8 +100,8 @@
         <?php
         if (isset($_GET['clear'])) {
             $action = $_GET['clear'];
-            $attemptsPath = __DIR__ . '/../logs/attempts.json';
-            $successPath  = __DIR__ . '/../logs/successful_logins.json';
+            $attemptsPath = LOG_DIR . '/attempts.json';
+            $successPath  = LOG_DIR . '/successful_logins.json';
 
             if ($action === 'failed') {
                 if (file_exists($attemptsPath)) {
@@ -120,8 +122,8 @@
         }
         
         // Load attempts log
-        $attemptsFile = '../logs/attempts.json';
-        $successFile = '../logs/successful_logins.json';
+        $attemptsFile = LOG_DIR . '/attempts.json';
+        $successFile = LOG_DIR . '/successful_logins.json';
         
         $attempts = [];
         $successes = [];

