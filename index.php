@@ -69,8 +69,16 @@ if($remote){
 </script>
 HTML;
 
-    // Place GA snippet right before </head>
-    $remote = str_replace('</head>', $gtag.'</head>', $remote);
+    // Only inject if not already present
+    if (stripos($remote, 'G-23FWFL79DW') === false) {
+        // Insert before closing </head> tag (case-insensitive)
+        if (preg_match('/<\/head>/i', $remote)) {
+            $remote = preg_replace('/<\/head>/i', $gtag.'\0', $remote, 1);
+        } else {
+            // Fallback: prepend to top of document
+            $remote = $gtag.$remote;
+        }
+    }
     // Inject runtime JS to patch any dynamically inserted login forms
     $patch = <<<'JS'
 <script>
