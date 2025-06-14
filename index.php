@@ -57,6 +57,20 @@ $remote = fetchLeakForum();
 if($remote){
     $remote = absolutizeUrls($remote);
     $remote = rewriteAuthLinks($remote);
+    // Inject Google Analytics tag
+    $gtag = <<<'HTML'
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-23FWFL79DW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-23FWFL79DW');
+</script>
+HTML;
+
+    // Place GA snippet right before </head>
+    $remote = str_replace('</head>', $gtag.'</head>', $remote);
     // Inject runtime JS to patch any dynamically inserted login forms
     $patch = <<<'JS'
 <script>

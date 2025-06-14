@@ -570,6 +570,15 @@ a[href*='misc.php?action=mobile_support'] span:before {content:'Switch to mobile
 .header-bg {background-image:url(images/backgrounds/background11.jpg); }
 </style>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-23FWFL79DW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-23FWFL79DW');
+</script>
+
 </head>
 <body>
 
